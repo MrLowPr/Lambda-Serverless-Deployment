@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101d35">
+  <meta name="description" content="Portal pelaporan kerusakan fasilitas PT Arunika Teknologi. Sampaikan laporan fasilitas dengan mudah dan pantau nomor tiket Anda.">
+  <title>Pelaporan Fasilitas — PT Arunika Teknologi</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --navy: #101d35;
+      --navy-2: #182b4b;
+      --blue: #3267e9;
+      --blue-dark: #2452c5;
+      --ink: #182238;
+      --muted: #68758b;
+      --line: #e3e8f0;
+      --paper: #ffffff;
+      --canvas: #f3f6fb;
+      --pale: #edf3ff;
+      --success: #18794e;
+      --success-bg: #eaf7f0;
+      --danger: #b42318;
+      --danger-bg: #fff0ee;
+      --shadow: 0 24px 70px rgba(22, 39, 70, .12);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background: var(--canvas);
+      line-height: 1.55;
+    }
+    button, input, textarea { font: inherit; }
+    .topbar {
+      color: #fff;
+      background: var(--navy);
+      border-bottom: 1px solid rgba(255,255,255,.09);
+    }
+    .topbar-inner {
+      width: min(1120px, calc(100% - 48px));
+      min-height: 78px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-mark {
+      width: 40px; height: 40px; border-radius: 12px;
+      display: grid; place-items: center;
+      color: #fff; background: linear-gradient(145deg, #4a83ff, #2452c5);
+      box-shadow: 0 6px 18px rgba(50,103,233,.3);
+      font-weight: 800; letter-spacing: -.06em;
+    }
+    .brand-name { font-size: 14px; font-weight: 750; letter-spacing: .01em; }
+    .brand-sub { color: #aab8d0; font-size: 11px; letter-spacing: .11em; text-transform: uppercase; }
+    .topbar-label {
+      color: #c5d0e2; font-size: 12px; font-weight: 600;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: #65d69b; box-shadow: 0 0 0 4px rgba(101,214,155,.12); }
+    .hero {
+      position: relative; overflow: hidden;
+      background: var(--navy);
+      color: #fff;
+      padding: 64px 24px 108px;
+    }
+    .hero::before, .hero::after {
+      content: ""; position: absolute; pointer-events: none; border-radius: 50%;
+      border: 1px solid rgba(154,184,255,.14);
+    }
+    .hero::before { width: 520px; height: 520px; right: -140px; top: -310px; }
+    .hero::after { width: 390px; height: 390px; right: -75px; top: -245px; }
+    .hero-inner { width: min(1120px, 100%); margin: 0 auto; position: relative; z-index: 1; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 9px;
+      color: #b9ccff; font-size: 11px; font-weight: 750; letter-spacing: .16em; text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    .eyebrow::before { content: ""; width: 24px; height: 2px; background: #6d96ff; }
+    h1 {
+      max-width: 690px; margin: 0;
+      font-size: clamp(34px, 5vw, 54px); line-height: 1.08;
+      letter-spacing: -.045em; font-weight: 760;
+    }
+    .hero-copy { max-width: 570px; margin: 18px 0 0; color: #bcc8dc; font-size: 16px; }
+    .content-wrap {
+      width: min(1120px, calc(100% - 48px));
+      margin: -58px auto 0; position: relative; z-index: 2;
+      display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(260px, .75fr);
+      align-items: start; gap: 24px;
+    }
+    .panel {
+      background: var(--paper); border: 1px solid rgba(220,227,238,.9);
+      border-radius: 18px; box-shadow: var(--shadow);
+    }
+    .form-panel { padding: 32px; }
+    .panel-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 27px; }
+    .panel-heading h2 { margin: 0; font-size: 21px; letter-spacing: -.025em; }
+    .panel-heading p { margin: 5px 0 0; color: var(--muted); font-size: 13px; }
+    .required-note { color: var(--muted); font-size: 11px; white-space: nowrap; padding-top: 5px; }
+    .field { margin-bottom: 20px; }
+    label { display: block; margin-bottom: 8px; font-size: 13px; font-weight: 700; color: #29364d; }
+    .required { color: var(--blue); }
+    input, textarea {
+      display: block; width: 100%; border: 1px solid #dce3ee; border-radius: 10px;
+      background: #fff; color: var(--ink); outline: none;
+      transition: border-color .18s, box-shadow .18s, background .18s;
+    }
+    input { height: 48px; padding: 0 14px; }
+    textarea { min-height: 132px; resize: vertical; padding: 12px 14px; }
+    input::placeholder, textarea::placeholder { color: #9aa5b6; }
+    input:focus, textarea:focus { border-color: #6c91f3; box-shadow: 0 0 0 4px rgba(50,103,233,.11); }
+    .field-hint { display: flex; justify-content: space-between; gap: 10px; margin-top: 6px; color: #8290a5; font-size: 11px; }
+    .submit-button {
+      display: flex; justify-content: center; align-items: center; gap: 10px;
+      width: 100%; min-height: 50px; border: 0; border-radius: 10px;
+      color: #fff; background: var(--blue); font-weight: 750; cursor: pointer;
+      box-shadow: 0 8px 18px rgba(50,103,233,.22);
+      transition: background .18s, transform .18s, box-shadow .18s;
+    }
+    .submit-button:hover { background: var(--blue-dark); box-shadow: 0 10px 22px rgba(50,103,233,.28); transform: translateY(-1px); }
+    .submit-button:focus-visible { outline: 3px solid #9db7ff; outline-offset: 3px; }
+    .submit-button:disabled { cursor: wait; opacity: .72; transform: none; }
+    .button-arrow { font-size: 18px; line-height: 1; }
+    .spinner {
+      width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.4);
+      border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .notice {
+      display: none; margin-top: 18px; border-radius: 11px; padding: 14px 15px;
+      font-size: 13px; overflow-wrap: anywhere;
+    }
+    .notice.show { display: block; }
+    .notice.success { background: var(--success-bg); color: #145b3d; border: 1px solid #c8ead7; }
+    .notice.error { background: var(--danger-bg); color: var(--danger); border: 1px solid #f4d0cb; }
+    .ticket-label { display: block; margin-top: 7px; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; opacity: .75; }
+    .ticket-number { display: block; margin-top: 1px; font-size: 19px; font-weight: 800; letter-spacing: .04em; }
+    .side-column { display: grid; gap: 16px; }
+    .info-panel { padding: 24px; box-shadow: 0 14px 40px rgba(22,39,70,.07); }
+    .info-icon {
+      width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px;
+      color: var(--blue); background: var(--pale); margin-bottom: 15px;
+    }
+    .info-panel h3 { margin: 0 0 7px; font-size: 15px; letter-spacing: -.01em; }
+    .info-panel p { margin: 0; color: var(--muted); font-size: 12px; }
+    .steps { margin-top: 18px; display: grid; gap: 15px; }
+    .step { display: grid; grid-template-columns: 27px 1fr; gap: 10px; align-items: start; }
+    .step-number {
+      width: 25px; height: 25px; display: grid; place-items: center; border-radius: 8px;
+      background: #eef3ff; color: var(--blue); font-size: 11px; font-weight: 800;
+    }
+    .step strong { display: block; font-size: 12px; margin: 1px 0 2px; }
+    .step span:last-child { display: block; color: var(--muted); font-size: 11px; }
+    .privacy {
+      border-top: 1px solid var(--line); padding-top: 16px; margin-top: 20px;
+      color: #7c899d; font-size: 11px;
+    }
+    footer { width: min(1120px, calc(100% - 48px)); margin: 34px auto 0; padding: 22px 0 30px; border-top: 1px solid #dfe5ef; color: #8490a2; font-size: 11px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    footer strong { color: #536078; font-weight: 700; }
+    @media (max-width: 800px) {
+      .content-wrap { grid-template-columns: 1fr; max-width: 650px; }
+      .side-column { grid-template-columns: 1fr 1fr; }
+      .hero { padding-top: 52px; }
+    }
+    @media (max-width: 560px) {
+      .topbar-inner, .content-wrap, footer { width: min(100% - 32px, 520px); }
+      .topbar-inner { min-height: 68px; }
+      .topbar-label { font-size: 10px; }
+      .hero { padding: 43px 16px 91px; }
+      .hero-copy { font-size: 14px; }
+      .content-wrap { margin-top: -48px; }
+      .form-panel { padding: 23px 19px; }
+      .panel-heading { display: block; margin-bottom: 23px; }
+      .required-note { margin-top: 8px; }
+      .side-column { grid-template-columns: 1fr; }
+      footer { margin-top: 25px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand" aria-label="PT Arunika Teknologi">
+        <div class="brand-mark" aria-hidden="true">A</div>
+        <div>
+          <div class="brand-name">PT Arunika Teknologi</div>
+          <div class="brand-sub">Facility Support</div>
+        </div>
+      </div>
+      <div class="topbar-label"><span class="live-dot" aria-hidden="true"></span> Portal Pelaporan Fasilitas</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="eyebrow">Layanan internal perusahaan</div>
+        <h1>Laporkan kerusakan.<br>Segera kami tindak lanjuti.</h1>
+        <p class="hero-copy">Bantu menjaga fasilitas kerja tetap aman dan berfungsi. Isi formulir di bawah ini dengan informasi yang jelas agar tim terkait dapat menindaklanjuti laporanmu.</p>
+      </div>
+    </section>
+
+    <div class="content-wrap">
+      <section class="panel form-panel" aria-labelledby="form-title">
+        <div class="panel-heading">
+          <div>
+            <h2 id="form-title">Formulir laporan kerusakan</h2>
+            <p>Lengkapi informasi berikut untuk membuat tiket laporan.</p>
+          </div>
+          <div class="required-note"><span class="required">*</span> Wajib diisi</div>
+        </div>
+
+        <form id="report-form">
+          <div class="field">
+            <label for="nama">Nama pelapor <span class="required">*</span></label>
+            <input id="nama" name="nama" type="text" placeholder="Masukkan nama lengkap" minlength="2" maxlength="80" autocomplete="name" required>
+            <div class="field-hint"><span>Nama yang dapat dihubungi oleh tim fasilitas.</span><span>2–80 karakter</span></div>
+          </div>
+
+          <div class="field">
+            <label for="lokasi">Lokasi / ruangan <span class="required">*</span></label>
+            <input id="lokasi" name="lokasi" type="text" placeholder="Contoh: Laboratorium Komputer 1" minlength="2" maxlength="120" required>
+            <div class="field-hint"><span>Sebutkan gedung, lantai, atau nomor ruangan.</span><span>2–120 karakter</span></div>
+          </div>
+
+          <div class="field">
+            <label for="masalah">Deskripsi kerusakan <span class="required">*</span></label>
+            <textarea id="masalah" name="masalah" placeholder="Jelaskan fasilitas yang rusak, kondisi yang terjadi, dan sejak kapan masalah ditemukan..." minlength="5" maxlength="500" required></textarea>
+            <div class="field-hint"><span>Hindari deskripsi terlalu singkat agar mudah ditindaklanjuti.</span><span id="char-count">0/500</span></div>
+          </div>
+
+          <button class="submit-button" id="submit-button" type="submit">
+            <span id="button-text">Kirim laporan</span><span class="button-arrow" id="button-arrow" aria-hidden="true">→</span>
+          </button>
+          <div class="notice" id="notice" role="status" aria-live="polite"></div>
+        </form>
+      </section>
+
+      <aside class="side-column" aria-label="Informasi pelaporan">
+        <section class="panel info-panel">
+          <div class="info-icon" aria-hidden="true">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l2.5 2.5"/><circle cx="12" cy="12" r="9"/></svg>
+          </div>
+          <h3>Bagaimana prosesnya?</h3>
+          <p>Setiap laporan akan memperoleh nomor tiket setelah berhasil masuk ke sistem.</p>
+          <div class="steps">
+            <div class="step"><span class="step-number">01</span><div><strong>Isi formulir</strong><span>Masukkan identitas pelapor dan detail kerusakan.</span></div></div>
+            <div class="step"><span class="step-number">02</span><div><strong>Laporan masuk antrean</strong><span>Sistem membuat nomor tiket dan menyimpan laporan untuk diproses.</span></div></div>
+            <div class="step"><span class="step-number">03</span><div><strong>Notifikasi dikirim</strong><span>Tim administrator menerima pemberitahuan melalui email.</span></div></div>
+          </div>
+        </section>
+
+        <section class="panel info-panel">
+          <div class="info-icon" aria-hidden="true">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></svg>
+          </div>
+          <h3>Gunakan informasi yang tepat</h3>
+          <p>Pastikan lokasi dan deskripsi kerusakan spesifik. Jangan masukkan kata sandi atau informasi rahasia pada formulir ini.</p>
+          <div class="privacy">Portal ini digunakan untuk pelaporan fasilitas PT Arunika Teknologi.</div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    <span>© <span id="year"></span> <strong>PT Arunika Teknologi</strong>. Hak cipta dilindungi.</span>
+    <span>Facility Support · Sistem Pelaporan Kerusakan</span>
+  </footer>
+
+  <script>
+    // Endpoint HTTP API Gateway untuk route POST /laporan.
+    const API_URL = "https://qsdrw1do7g.execute-api.us-east-1.amazonaws.com/laporan";
+
+    const form = document.getElementById("report-form");
+    const namaInput = document.getElementById("nama");
+    const lokasiInput = document.getElementById("lokasi");
+    const masalahInput = document.getElementById("masalah");
+    const submitButton = document.getElementById("submit-button");
+    const buttonText = document.getElementById("button-text");
+    const buttonArrow = document.getElementById("button-arrow");
+    const notice = document.getElementById("notice");
+    const charCount = document.getElementById("char-count");
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    masalahInput.addEventListener("input", () => {
+      charCount.textContent = masalahInput.value.length + "/500";
+    });
+
+    function showNotice(type, message, ticket) {
+      notice.className = "notice show " + type;
+      notice.replaceChildren();
+
+      const messageNode = document.createElement("div");
+      messageNode.textContent = message;
+      notice.appendChild(messageNode);
+
+      if (ticket) {
+        const label = document.createElement("span");
+        label.className = "ticket-label";
+        label.textContent = "Nomor tiket laporan";
+        const number = document.createElement("strong");
+        number.className = "ticket-number";
+        number.textContent = ticket;
+        notice.append(label, number);
+      }
+    }
+
+    function setLoading(loading) {
+      submitButton.disabled = loading;
+      if (loading) {
+        buttonText.textContent = "Mengirim laporan...";
+        buttonArrow.replaceWith(Object.assign(document.createElement("span"), {
+          id: "button-arrow",
+          className: "spinner",
+          ariaHidden: "true"
+        }));
+      } else {
+        buttonText.textContent = "Kirim laporan";
+        const spinner = document.getElementById("button-arrow");
+        const arrow = document.createElement("span");
+        arrow.id = "button-arrow";
+        arrow.className = "button-arrow";
+        arrow.setAttribute("aria-hidden", "true");
+        arrow.textContent = "→";
+        if (spinner) spinner.replaceWith(arrow);
+      }
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      notice.className = "notice";
+      notice.textContent = "";
+
+      const payload = {
+        nama: namaInput.value.trim(),
+        lokasi: lokasiInput.value.trim(),
+        masalah: masalahInput.value.trim()
+      };
+
+      if (payload.nama.length < 2 || payload.nama.length > 80 ||
+          payload.lokasi.length < 2 || payload.lokasi.length > 120 ||
+          payload.masalah.length < 5 || payload.masalah.length > 500) {
+        showNotice("error", "Periksa kembali isian. Panjang nama, lokasi, atau deskripsi belum sesuai ketentuan.");
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        let result;
+        try {
+          result = await response.json();
+        } catch {
+          throw new Error("Server mengirim respons yang tidak dapat dibaca. Silakan coba lagi.");
+        }
+
+        if (!response.ok || String(result.status || "").toLowerCase() !== "diterima") {
+          throw new Error(result.pesan || result.error || "Laporan belum berhasil dikirim. Silakan coba lagi.");
+        }
+
+        showNotice("success", result.pesan || "Laporan berhasil diterima dan masuk antrean.", result.tiket);
+        form.reset();
+        charCount.textContent = "0/500";
+      } catch (error) {
+        const message = error instanceof TypeError
+          ? "Tidak dapat terhubung ke layanan. Periksa koneksi dan konfigurasi CORS API, lalu coba lagi."
+          : error.message;
+        showNotice("error", message);
+      } finally {
+        setLoading(false);
+      }
+    });
+  </script>
+</body>
+</html>
